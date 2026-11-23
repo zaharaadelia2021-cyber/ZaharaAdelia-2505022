@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BarangController;
+use App\Http\Controllers\CatatController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +26,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/barang/{barang}/ubah', [BarangController::class, 'edit'])->name('barang.edit');
     Route::put('/barang/{barang}', [BarangController::class, 'update'])->name('barang.update');
     Route::delete('/barang/{barang}', [BarangController::class, 'destroy'])->name('barang.destroy');
-    Route::view('/catat', 'pages.catat')->name('catat');
+    Route::get('/catat', [CatatController::class, 'create'])->name('catat');
+    Route::post('/catat', [CatatController::class, 'store'])->name('catat.store');
     Route::view('/belanja', 'pages.belanja')->name('belanja');
 });
