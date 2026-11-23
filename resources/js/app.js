@@ -87,3 +87,50 @@ if (catatanForm) {
     updateRows();
     updateTotal();
 }
+
+const targetInput = document.querySelector('[data-target-input]');
+
+if (targetInput) {
+    document.querySelectorAll('[data-target-step]').forEach((button) => {
+        button.addEventListener('click', () => {
+            const step = Number(button.dataset.targetStep);
+            const value = Number(targetInput.value || 1) + step;
+            targetInput.value = String(Math.max(1, Math.min(65535, value)));
+        });
+    });
+}
+
+const shoppingList = document.querySelector('[data-shopping-list]');
+
+if (shoppingList) {
+    const total = document.querySelector('[data-shopping-total]');
+    const totalLabel = document.querySelector('[data-shopping-total-label]');
+    const formatCurrency = new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+        maximumFractionDigits: 0,
+    });
+
+    const updateShoppingTotal = () => {
+        const rows = [...shoppingList.querySelectorAll('[data-shopping-item]')];
+        const remaining = rows.filter((row) => !row.querySelector('[data-purchased]').checked);
+        const value = remaining.reduce((sum, row) => sum + Number(row.dataset.cost), 0);
+
+        total.textContent = formatCurrency.format(value);
+        totalLabel.textContent = remaining.length === rows.length
+            ? `Total untuk ${rows.length} barang`
+            : `Sisa ${remaining.length} dari ${rows.length} barang`;
+    };
+
+    shoppingList.addEventListener('change', (event) => {
+        const checkbox = event.target.closest('[data-purchased]');
+        if (!checkbox) return;
+
+        const row = checkbox.closest('[data-shopping-item]');
+        row.querySelector('[data-item-name]').classList.toggle('line-through', checkbox.checked);
+        row.querySelector('[data-purchased-label]').classList.toggle('hidden', !checkbox.checked);
+        updateShoppingTotal();
+    });
+
+    updateShoppingTotal();
+}

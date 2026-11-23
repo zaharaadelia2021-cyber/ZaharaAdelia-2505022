@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BarangController;
+use App\Http\Controllers\BelanjaController;
 use App\Http\Controllers\CatatController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -19,7 +21,7 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::post('/keluar', [AuthController::class, 'logout'])->name('logout');
-    Route::view('/beranda', 'pages.home')->name('home');
+    Route::get('/beranda', [HomeController::class, 'index'])->name('home');
     Route::get('/barang', [BarangController::class, 'index'])->name('barang');
     Route::get('/barang/tambah', [BarangController::class, 'create'])->name('barang.create');
     Route::post('/barang', [BarangController::class, 'store'])->name('barang.store');
@@ -28,5 +30,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/barang/{barang}', [BarangController::class, 'destroy'])->name('barang.destroy');
     Route::get('/catat', [CatatController::class, 'create'])->name('catat');
     Route::post('/catat', [CatatController::class, 'store'])->name('catat.store');
-    Route::view('/belanja', 'pages.belanja')->name('belanja');
+    Route::get('/belanja', [BelanjaController::class, 'index'])->name('belanja');
+    Route::post('/belanja/target-stok', [BelanjaController::class, 'updateTarget'])->name('belanja.target.update');
 });
