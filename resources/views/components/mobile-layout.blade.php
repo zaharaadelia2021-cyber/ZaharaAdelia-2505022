@@ -32,13 +32,14 @@
             </main>
 
             <nav aria-label="Navigasi utama" class="fixed bottom-0 left-1/2 z-10 w-full max-w-md -translate-x-1/2 border-t border-slate-100 bg-white/95 px-2 pt-2 shadow-[0_-8px_24px_-22px_rgba(15,23,42,0.3)] backdrop-blur" style="padding-bottom: max(env(safe-area-inset-bottom), 0.5rem)">
-                <div class="grid grid-cols-4">
+                <div class="grid grid-cols-5">
                     @php
                         $tabs = [
                             ['route' => 'home', 'label' => 'Beranda', 'icon' => 'home'],
                             ['route' => 'barang', 'label' => 'Barang', 'icon' => 'box'],
                             ['route' => 'catat', 'label' => 'Catat', 'icon' => 'plus'],
                             ['route' => 'belanja', 'label' => 'Belanja', 'icon' => 'bag'],
+                            ['route' => 'profile', 'label' => 'Profil', 'icon' => 'profile'],
                         ];
                     @endphp
                     @foreach ($tabs as $tab)
@@ -49,8 +50,10 @@
                                 <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m12 3 8.5 4.5v9L12 21l-8.5-4.5v-9L12 3Z" /><path stroke-linecap="round" stroke-linejoin="round" d="m3.8 7.7 8.2 4.5 8.2-4.5M12 12.2V21m4.2-15.5-8.4 4.6" /></svg>
                             @elseif ($tab['icon'] === 'plus')
                                 <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path stroke-linecap="round" d="M12 8v8m-4-4h8" /></svg>
-                            @else
+                            @elseif ($tab['icon'] === 'bag')
                                 <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14l1 12H4L5 8Zm3 0V6a4 4 0 0 1 8 0v2" /></svg>
+                            @else
+                                <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="8" r="3.5" /><path stroke-linecap="round" stroke-linejoin="round" d="M5 20v-1a7 7 0 0 1 14 0v1H5Z" /></svg>
                             @endif
                             <span>{{ $tab['label'] }}</span>
                         </a>

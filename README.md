@@ -1,59 +1,129 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Breeze — Pencatatan Stok dan Rekomendasi Restock Warung
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Breeze adalah aplikasi web berbahasa Indonesia untuk membantu pemilik warung kecil mencatat persediaan dan transaksi harian, memantau barang yang perlu diperiksa, serta menyusun rekomendasi belanja berdasarkan penjualan terbaru.
 
-## About Laravel
+## Latar belakang masalah
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Pencatatan stok secara manual menyulitkan pemilik warung mengetahui jumlah barang terkini dan memperkirakan kapan harus kulakan. Stok yang habis dapat menghambat penjualan, sedangkan pembelian berlebih mengikat modal. Aplikasi ini menyimpan perubahan stok dan transaksi secara terstruktur, lalu memberi perkiraan kebutuhan restock menggunakan data penjualan selama tujuh hari kalender terakhir.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Fitur
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Registrasi warung dan pemilik, login, sesi ingat saya, dan logout.
+- Ringkasan kondisi stok dan daftar barang yang paling perlu diperhatikan.
+- Pengelolaan barang: tambah, ubah, hapus, cari, dan filter berdasarkan status.
+- Pencatatan transaksi kulakan (stok masuk) dan barang terjual (stok keluar), termasuk lebih dari satu barang dalam satu catatan.
+- Validasi agar penjualan tidak mengurangi stok di bawah nol; satu catatan multi-barang disimpan secara transaksional.
+- Rekomendasi jumlah dan estimasi biaya restock dari rata-rata penjualan per hari selama tujuh hari terakhir.
+- Target stok dalam hari, dapat diubah dari layar Belanja maupun Profil. Keduanya menggunakan satu pengaturan per akun.
+- Profil berisi identitas warung/pemilik, menu ubah identitas, ganti kata sandi, dan keluar.
 
-## Learning Laravel
+## Teknologi
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+- PHP 8.2 atau lebih baru, Laravel 12, Blade, dan Eloquent.
+- SQLite secara bawaan (dapat dikonfigurasi untuk database lain yang didukung Laravel).
+- Node.js/npm, Vite, dan Tailwind CSS 4 untuk aset antarmuka.
+- Pest untuk pengujian.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Instalasi dan menjalankan aplikasi
 
-## Laravel Sponsors
+Pastikan PHP beserta ekstensi yang dibutuhkan Laravel, Composer, Node.js, dan npm telah tersedia.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+1. Pasang dependensi PHP dan salin konfigurasi:
 
-### Premium Partners
+   ```sh
+   composer install
+   cp .env.example .env
+   php artisan key:generate
+   ```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+   Di Windows PowerShell, gunakan `Copy-Item .env.example .env` sebagai pengganti `cp`.
 
-## Contributing
+2. Secara bawaan `.env.example` menggunakan SQLite. Buat berkas database kosong `database/database.sqlite` jika belum ada:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+   ```sh
+   touch database/database.sqlite
+   ```
 
-## Code of Conduct
+   Di Windows PowerShell: `New-Item -ItemType File -Path database/database.sqlite` (jalankan hanya jika berkas belum ada). Untuk memakai database lain, sesuaikan variabel `DB_*` di `.env` dan siapkan databasenya.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+3. Jalankan migrasi, pasang dependensi frontend, dan bangun aset:
 
-## Security Vulnerabilities
+   ```sh
+   php artisan migrate
+   npm install
+   npm run build
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+4. (Opsional) Isi data contoh, lalu jalankan server:
 
-## License
+   ```sh
+   php artisan db:seed
+   php artisan serve
+   ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+   Buka URL yang ditampilkan Artisan (biasanya `http://127.0.0.1:8000`). Seeder membuat akun contoh `sari@warungberkah.test` dengan kata sandi `password`; gunakan hanya untuk pengembangan lokal.
+
+   Untuk pengembangan frontend dengan hot reload, jalankan `npm run dev` di terminal terpisah bersama `php artisan serve`.
+
+### Pengujian
+
+```sh
+php artisan test
+npm run build
+```
+
+Checklist pengujian manual tersedia di [docs/checklist-pengujian-manual.md](docs/checklist-pengujian-manual.md), dan bahan tanya-jawab presentasi tersedia di [docs/tanya-jawab-dosen.md](docs/tanya-jawab-dosen.md).
+
+## Alur sistem
+
+1. **Daftar/masuk.** Pemilik membuat akun dengan nama warung, nama pemilik, email unik, dan kata sandi. Setelah berhasil masuk, aplikasi membuat sesi terautentikasi.
+2. **Kelola barang.** Pemilik menambahkan nama barang, satuan, harga beli/jual, stok saat ini, dan stok minimum. Daftar hanya menampilkan data milik akun aktif; nama barang harus unik di dalam akun tersebut. Status berasal dari stok: `Habis` jika stok nol, `Menipis` jika stok tidak melebihi stok minimum, selain itu `Aman`.
+3. **Catat perubahan.** Kulakan menambah stok dan membuat transaksi `masuk`; barang terjual mengurangi stok dan membuat transaksi `keluar`. Untuk catatan berisi beberapa barang, seluruh perubahan dilakukan dalam satu transaksi database agar tidak tersimpan sebagian jika ada validasi yang gagal.
+4. **Pantau dan rekomendasikan.** Beranda menampilkan ringkasan stok dan tiga barang paling mendesak. Layar Belanja menghitung rata-rata harian tiap barang dari jumlah transaksi `keluar` pada hari ini dan enam hari sebelumnya (total dibagi tujuh, termasuk hari tanpa penjualan). Transaksi `masuk` tidak dihitung.
+5. **Atur target dan profil.** Target stok adalah jumlah hari stok yang ingin dijaga. Nilai ini disimpan satu kali per akun, sehingga perubahan di Profil langsung digunakan Belanja dan Beranda, dan sebaliknya. Profil juga mengizinkan pemilik mengubah identitas/email dan mengganti kata sandi dengan verifikasi kata sandi saat ini.
+6. **Keluar.** Aplikasi mengakhiri sesi dan mengarahkan pemilik ke halaman masuk.
+
+### Perhitungan rekomendasi
+
+Untuk setiap barang:
+
+```text
+rata-rata harian = jumlah transaksi keluar dalam 7 hari kalender / 7
+jumlah beli = max(0, ceil((rata-rata harian × target hari) − stok saat ini))
+biaya = jumlah beli × harga beli
+```
+
+Rekomendasi yang perlu dibeli diurutkan berdasarkan perkiraan waktu stok tersisa, lalu nama barang. Estimasi belanja merupakan jumlah biaya seluruh rekomendasi. Daftar centang “sudah dibeli” pada layar Belanja hanya mengubah tampilan dan estimasi di halaman saat itu; saat ini centang tersebut tidak menyimpan transaksi kulakan dan tidak mengubah stok.
+
+## Struktur data
+
+Tabel aplikasi dibuat oleh migrasi `database/migrations/2026_11_20_000000_create_inventory_tables_and_add_nama_warung_to_users.php`:
+
+| Tabel | Kolom penting | Relasi/kegunaan |
+| --- | --- | --- |
+| `users` | `id`, `name`, `nama_warung`, `email`, `password`, `remember_token`, timestamps | Akun pemilik; email unik. Memiliki banyak barang dan satu pengaturan. |
+| `barang` | `id`, `user_id`, `nama`, `satuan`, `harga_beli`, `harga_jual`, `stok`, `stok_minimum`, timestamps | Barang milik pengguna. Nama unik per `user_id`; harga disimpan sebagai bilangan bulat, jumlah stok dengan dua angka desimal. Penghapusan akun menghapus barang terkait. |
+| `transaksi` | `id`, `barang_id`, `jenis`, `jumlah`, `tanggal`, timestamps | Riwayat perubahan stok untuk satu barang. `jenis` bernilai `masuk` atau `keluar`; terindeks menurut barang, jenis, dan tanggal. Penghapusan barang menghapus transaksinya. |
+| `pengaturan` | `id`, `user_id`, `hari_target_stok`, timestamps | Satu target stok per pengguna; `hari_target_stok` bilangan bulat positif dan default 3. |
+
+Laravel juga memakai tabel infrastruktur bawaan untuk sesi/cache/antrian sesuai konfigurasi. Model utama berada di `app/Models`; rumus rekomendasi ada di `app/Services/RestockService.php`; rute web ada di `routes/web.php`.
+
+## Struktur direktori penting
+
+```text
+app/
+  Http/Controllers/   Logika endpoint aplikasi
+  Http/Requests/      Validasi input
+  Models/             User, Barang, Transaksi, Pengaturan
+  Services/           Perhitungan restock
+database/
+  migrations/         Skema database
+  seeders/            Data demo
+resources/
+  views/              Halaman Blade dan komponen
+  css/                Tailwind CSS
+  js/                 Interaksi formulir dan daftar belanja
+routes/web.php        Rute aplikasi
+tests/Feature/        Pengujian alur fitur
+docs/                 Checklist manual dan tanya-jawab presentasi
+```

@@ -5,6 +5,7 @@ use App\Http\Controllers\BarangController;
 use App\Http\Controllers\BelanjaController;
 use App\Http\Controllers\CatatController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +22,10 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::post('/keluar', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/profil', [ProfileController::class, 'show'])->name('profile');
+    Route::put('/profil', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profil/kata-sandi', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
+    Route::post('/profil/target-stok', [ProfileController::class, 'updateTarget'])->name('profile.target.update');
     Route::get('/beranda', [HomeController::class, 'index'])->name('home');
     Route::get('/barang', [BarangController::class, 'index'])->name('barang');
     Route::get('/barang/tambah', [BarangController::class, 'create'])->name('barang.create');
